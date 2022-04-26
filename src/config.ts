@@ -1,0 +1,62 @@
+export enum Environment { Development = "development", Production = "production" }
+export enum LoggingLevel { Debug = "debug", Info = "info" }
+
+interface HttpConfigInterface {
+    port: number;
+}
+
+export interface ConfigInterface {
+    environment: Environment;
+    loggingLevel: LoggingLevel;
+    http: HttpConfigInterface;
+}
+
+console.log(process.env);
+
+class Config implements ConfigInterface {
+    environment: Environment;
+    loggingLevel: LoggingLevel;
+    http: HttpConfigInterface;
+
+    constructor() {
+        this.environment = this.getEnvironment();
+        this.loggingLevel = this.getLoggingLevel();
+        this.http = this.getHttpConfig();
+    }
+
+    private getHttpConfig(): HttpConfigInterface {
+        return {
+            port: parseInt(process.env.HTTP_PORT as string) || 3000
+        }
+    }
+
+    private getEnvironment(): Environment {
+        switch (process.env.ENVIRONMENT) {
+            case "dev":
+            case "development":
+                return Environment.Development;
+                break;
+            case "prod":
+            case "production":
+                return Environment.Production;
+                break;
+            default:
+                return Environment.Production;
+        }
+    }
+
+    private getLoggingLevel(): LoggingLevel {
+        switch (process.env.LOGGING_LEVEL) {
+            case "debug":
+                return LoggingLevel.Debug;
+                break;
+            case "info":
+                return LoggingLevel.Info;
+                break;
+            default:
+                return LoggingLevel.Info;
+        }
+    }
+}
+
+export const config = new Config(); 
