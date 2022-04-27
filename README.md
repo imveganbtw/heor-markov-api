@@ -1,1 +1,3 @@
 # heor-markov-api
+
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/9e6ea0d8adc248a88a2b3c2521f91583)](https://www.codacy.com/gh/imveganbtw/heor-markov-api/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=imveganbtw/heor-markov-api&amp;utm_campaign=Badge_Grade)[![Codacy Badge](https://app.codacy.com/project/badge/Coverage/9e6ea0d8adc248a88a2b3c2521f91583)](https://www.codacy.com/gh/imveganbtw/heor-markov-api/dashboard?utm_source=github.com&utm_medium=referral&utm_content=imveganbtw/heor-markov-api&utm_campaign=Badge_Coverage)
