@@ -5,23 +5,34 @@ interface HttpConfigInterface {
     port: number;
 }
 
+interface DBConfigInterface {
+    connectionString: string;
+}
+
 export interface ConfigInterface {
     environment: Environment;
     loggingLevel: LoggingLevel;
     http: HttpConfigInterface;
+    db: DBConfigInterface;
 }
-
-console.log(process.env);
 
 class Config implements ConfigInterface {
     environment: Environment;
     loggingLevel: LoggingLevel;
     http: HttpConfigInterface;
+    db: DBConfigInterface;
 
     constructor() {
         this.environment = this.getEnvironment();
         this.loggingLevel = this.getLoggingLevel();
         this.http = this.getHttpConfig();
+        this.db = this.getDBConfig();
+    }
+
+    private getDBConfig(): DBConfigInterface {
+        return {
+            connectionString: process.env.MONGODB_CONNECTION_STRING as string
+        }
     }
 
     private getHttpConfig(): HttpConfigInterface {

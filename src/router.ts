@@ -3,10 +3,10 @@ import PhraseController from "./controllers/phrase";
 
 const router = express.Router();
 
-router.get("/phrases", async (_req, res) => {
+router.post("/phrases", async (req, res) => {
   const controller = new PhraseController();
-  const response = await controller.getMessage();
-  return res.send(response);
+  const response = await controller.create(req, res);
+  return response;
 });
 
 export default router;

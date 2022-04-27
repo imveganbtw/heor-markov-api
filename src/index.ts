@@ -4,6 +4,7 @@ import expressWinston from "express-winston";
 import Router from "./router";
 import { config as Config, Environment, LoggingLevel } from "./config";
 import logger from "./logger";
+import markov from "./markov";
 
 
 const PORT = process.env.PORT || 8000;
@@ -25,3 +26,7 @@ app.use(Router);
 app.listen(Config.http.port, () => {
     logger.info(`HTTP Server listening on port ${Config.http.port}`);
 });
+
+!async function () {
+  await markov.loadCorpus();
+}();
