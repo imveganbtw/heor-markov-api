@@ -3,16 +3,21 @@ import { Request, Response } from "express";
 import { ParamsDictionary } from "express-serve-static-core";
 import logger from "../logger";
 import phraseDB, { Phrase } from "../phrase_db";
-
-interface PhraseResponse {
-    statusCode: number,
-    statusMessage: string,
-    body: Object
-}
+import markov, { GenerationConfig } from "../markov";
 
 export default class PhraseController {
-  public async create(req: Request, res: Response): Promise<Response> {
-    
+
+  public async get(req: Request, res: Response): Promise<Response> {
+    const options: GenerationConfig = {
+      from: req.params.from || "",
+      grams: parseInt(req.params.grams) || 4,
+      backward: false
+    }
+    const phrase = markov.generate(options);
+    return res.status(200).json({phrase: phrase});
+  }
+
+  public async create(req: Request, res: Response): Promise<Response> {    
     try {
       const phrase = this.parsePhrase(req.body);
       const objectID =  await phraseDB.createPhrase(phrase);

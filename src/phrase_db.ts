@@ -34,8 +34,8 @@ class PhraseDB {
         return result.insertedId.toHexString();
     }
 
-    public getCursor(query: Object = {}): FindCursor {
-        return this.client.db(this.db).collection(this.collection).find().limit(10);
+    public getCursor(query: Object = {}, limit = 100): FindCursor {
+        return this.client.db(this.db).collection(this.collection).find().limit(limit);
     }
     
     public async getDocumentCount(): Promise<number> {
