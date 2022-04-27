@@ -1,9 +1,10 @@
 name: 'coverage'
 on:
+    push:
+        branches: [ main ]
     pull_request:
-        branches:
-            - master
-            - main
+        branches: [ main ]
+
 jobs:
     coverage:
         permissions:
@@ -11,5 +12,5 @@ jobs:
           pull-requests: write
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v1
+            - uses: actions/checkout@v3
             - uses: ArtiomTr/jest-coverage-report-action@v2
