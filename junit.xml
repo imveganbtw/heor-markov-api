@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="1" failures="0" errors="0" time="3.717">
+  <testsuite name="PhraseDB" errors="0" failures="0" skipped="0" timestamp="2022-04-27T18:55:33" time="3.536" tests="1">
+    <testcase classname="PhraseDB should connect and return a client" name="PhraseDB should connect and return a client" time="0.005">
+    </testcase>
+  </testsuite>
+</testsuites>
