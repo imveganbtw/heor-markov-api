@@ -1,6 +1,6 @@
 import { FindCursor, MongoClient } from "mongodb";
-import { config } from "./config";
-import logger from "./logger";
+import Logger from "./logger";
+import Config from "./config";
 
 export interface Phrase {
   author_id: string;
@@ -8,26 +8,26 @@ export interface Phrase {
   metadata: Record<string, unknown>;
 }
 
-class PhraseDB {
+export default class PhraseDB {
   private client: MongoClient;
-
   private db: string;
-
   private collection: string;
 
-  constructor(db: string, collection: string, client?: MongoClient) {
+  constructor(db: string, collection: string, client: MongoClient) {
     this.db = db;
     this.collection = collection;
-    this.client = client || new MongoClient(config.db.connectionString);
+    this.client = client;
   }
 
-  public async connect(): Promise<void> {
-    logger.info(`Connecting to PhraseDB at ${config.db.connectionString}`);
+  public async connect(): Promise<MongoClient> {
+    Logger.info(`Connecting to PhraseDB at ${Config.db.connectionString}`);
     try {
       await this.client.connect();
-      logger.info("Connection to PhraseDB established.");
+      Logger.info("Connection to PhraseDB established.");
+      return this.client;
     } catch (error) {
-      logger.error("Connection to PhraseDB failed", error);
+      Logger.error("Connection to PhraseDB failed", error);
+      throw error;
     }
   }
 
@@ -58,9 +58,9 @@ class PhraseDB {
   }
 }
 
-const phraseDB = new PhraseDB(
-  config.markov.db_name,
-  config.markov.collection_name
-);
-phraseDB.connect();
-export default phraseDB;
+// const phraseDB = new PhraseDB(
+// config.markov.db_name,
+// config.markov.collection_name
+// );
+// phraseDB.connect();
+// export default phraseDB;

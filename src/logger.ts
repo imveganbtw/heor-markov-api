@@ -1,15 +1,12 @@
+// configure winston
 import winston from "winston";
-import { config, Environment } from "./config";
+import { Format } from "logform";
+import config, { Environment } from "./config";
 
-const logger = winston.createLogger({
-  level: config.loggingLevel,
-  format: winston.format.json(),
-});
-
-const format =
+const format: Format =
   config.environment === Environment.Development
     ? winston.format.combine(winston.format.cli(), winston.format.colorize())
     : winston.format.logstash();
-logger.add(new winston.transports.Console({ format }));
 
-export default logger;
+winston.add(new winston.transports.Console({ format }));
+export default winston;

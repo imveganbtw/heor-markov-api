@@ -30,13 +30,9 @@ export interface ConfigInterface {
 
 class Config implements ConfigInterface {
   environment: Environment;
-
   loggingLevel: LoggingLevel;
-
   http: HttpConfigInterface;
-
   db: DBConfigInterface;
-
   markov: MarkovConfigInterface;
 
   constructor() {
@@ -87,4 +83,4 @@ class Config implements ConfigInterface {
   }
 }
 
-export const config = new Config();
+export default new Config();

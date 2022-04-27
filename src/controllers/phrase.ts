@@ -2,8 +2,9 @@ import assert, { AssertionError } from "assert";
 import { Request, Response } from "express";
 import { ParamsDictionary } from "express-serve-static-core";
 import logger from "../logger";
-import phraseDB, { Phrase } from "../phrase_db";
-import markov, { GenerationConfig } from "../markov";
+import { GenerationConfig } from "../markov";
+import { Phrase } from "../phrase_db";
+import { phraseDb, markov } from "../services";
 
 export default class PhraseController {
   public static async get(req: Request, res: Response): Promise<Response> {
@@ -19,7 +20,7 @@ export default class PhraseController {
   public static async create(req: Request, res: Response): Promise<Response> {
     try {
       const phrase = PhraseController.parsePhrase(req.body);
-      const objectID = await phraseDB.createPhrase(phrase);
+      const objectID = await phraseDb.createPhrase(phrase);
       return res.status(201).json({ objectID });
     } catch (error) {
       if (error instanceof AssertionError) {
@@ -34,7 +35,7 @@ export default class PhraseController {
 
   private static async storePhrase(phrase: Phrase): Promise<string> {
     try {
-      return await phraseDB.createPhrase(phrase);
+      return await phraseDb.createPhrase(phrase);
     } catch (error) {
       logger.error("Failed to store phrase", error);
       throw error;

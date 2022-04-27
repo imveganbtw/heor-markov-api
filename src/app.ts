@@ -2,9 +2,9 @@ import express, { Application } from "express";
 import winston from "winston";
 import expressWinston from "express-winston";
 import Router from "./router";
-import { config, Environment, LoggingLevel } from "./config";
+import Config, { Environment, LoggingLevel } from "./config";
 import logger from "./logger";
-import markov from "./markov";
+import { markov } from "./services";
 
 const app: Application = express();
 
@@ -13,22 +13,21 @@ app.use(
   expressWinston.logger({
     transports: [new winston.transports.Console()],
     format:
-      config.environment !== Environment.Production
+      Config.environment !== Environment.Production
         ? winston.format.combine(
             winston.format.cli(),
             winston.format.colorize()
           )
         : winston.format.logstash(),
-    meta: config.loggingLevel === LoggingLevel.Debug, // include metadata in debug mode
+    meta: Config.loggingLevel === LoggingLevel.Debug, // include metadata in debug mode
     expressFormat: true,
-    colorize: config.environment === Environment.Development, // Colorize in dev mode
+    colorize: Config.environment === Environment.Development, // Colorize in dev mode
   })
 );
 
 app.use(Router);
 
-app.listen(config.http.port, () => {
-  logger.info(`HTTP Server listening on port ${config.http.port}`);
+app.listen(Config.http.port, () => {
+  logger.info(`HTTP Server listening on port ${Config.http.port}`);
+  markov.loadCorpus();
 });
-
-markov.loadCorpus();
