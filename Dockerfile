@@ -18,6 +18,7 @@ RUN npm install --only=production
 FROM dependencies as build
 COPY tsconfig.json ./
 COPY ./src/ ./src/
+RUN npm install typescript
 RUN npm run build
 
 #
