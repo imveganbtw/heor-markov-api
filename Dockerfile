@@ -17,12 +17,12 @@ RUN npm install
 #
 # Test
 #############################
-FROM dependencies as test 
-COPY . .
-COPY jest.config.js ./
-COPY ./src/ ./src/
-COPY ./tests/ ./tests/
-RUN npm run lint && npm run test
+# FROM dependencies as test 
+# COPY . .
+# COPY jest.config.js ./
+# COPY ./src/ ./src/
+# COPY ./tests/ ./tests/
+# RUN npm run lint && npm run test
 
 #
 # Build
