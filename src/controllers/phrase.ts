@@ -6,22 +6,21 @@ import phraseDB, { Phrase } from "../phrase_db";
 import markov, { GenerationConfig } from "../markov";
 
 export default class PhraseController {
-
-  public async get(req: Request, res: Response): Promise<Response> {
+  public static async get(req: Request, res: Response): Promise<Response> {
     const options: GenerationConfig = {
       from: req.params.from || "",
-      grams: parseInt(req.params.grams) || 4,
-      backward: false
-    }
+      grams: parseInt(req.params.grams, 10) || 4,
+      backward: false,
+    };
     const phrase = markov.generate(options);
-    return res.status(200).json({phrase: phrase});
+    return res.status(200).json({ phrase });
   }
 
-  public async create(req: Request, res: Response): Promise<Response> {    
+  public static async create(req: Request, res: Response): Promise<Response> {
     try {
-      const phrase = this.parsePhrase(req.body);
-      const objectID =  await phraseDB.createPhrase(phrase);
-      return res.status(201).json({objectID: objectID});
+      const phrase = PhraseController.parsePhrase(req.body);
+      const objectID = await phraseDB.createPhrase(phrase);
+      return res.status(201).json({ objectID });
     } catch (error) {
       if (error instanceof AssertionError) {
         logger.info("Received invalid request body", error.message);
@@ -31,9 +30,9 @@ export default class PhraseController {
       logger.debug(error);
       return res.status(500).json(error);
     }
-  } 
+  }
 
-  private async storePhrase(phrase: Phrase): Promise<string> {
+  private static async storePhrase(phrase: Phrase): Promise<string> {
     try {
       return await phraseDB.createPhrase(phrase);
     } catch (error) {
@@ -42,13 +41,13 @@ export default class PhraseController {
     }
   }
 
-  private parsePhrase(body: ParamsDictionary): Phrase {
-    assert(body.author_id != undefined, "author_id undefined");
+  private static parsePhrase(body: ParamsDictionary): Phrase {
+    assert(body.author_id !== undefined, "author_id undefined");
     assert(body.phrase !== undefined, "phrase undefined");
     return {
       author_id: String(body.author_id),
       phrase: String(body.phrase),
-      metadata: {}
-    }
+      metadata: {},
+    };
   }
 }
