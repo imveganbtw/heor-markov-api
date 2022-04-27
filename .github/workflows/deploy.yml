@@ -1,0 +1,25 @@
+name: deploy
+
+on: 
+  workflow_run:
+    workflows: ["ci"]
+    branches: [main]
+    types: 
+      - completed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build the Docker image
+    - run: docker build . --file Dockerfile --tag heorvcc.azurecr.io/heor-markov-api:$(date +%s)
+    - name: Azure Container Registry Login
+    - uses: Azure/docker-login@v1
+      with:
+        username: ${{secrets.CONTAINER_REGISTRY_USERNAME}}
+        password: ${{secrets.CONTAINER_REGISTRY_PASSWORD}}
+        login-server: ${{secrets.CONTAINER_REGISTRY_LOGIN_URL}}
+    - name: Deploy the image
+    - run: docker push heorvcc.azurecr.io/heor-markov-api:$(date +%s)
+
