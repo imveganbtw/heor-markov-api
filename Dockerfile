@@ -17,14 +17,19 @@ RUN npm install
 #
 # Test
 #############################
-FROM depencencies as test 
+FROM dependencies as test 
 COPY . .
-RUN npm lint && npm run test
+COPY jest.config.js ./
+COPY ./src/ ./src/
+COPY ./tests/ ./tests/
+RUN npm run lint && npm run test
 
 #
 # Build
 #############################
 FROM dependencies as build
+COPY tsconfig.json ./
+COPY ./src/ ./src/
 RUN npm run build
 
 #
@@ -32,6 +37,6 @@ RUN npm run build
 #############################
 FROM base as release
 
-COPY --from=dependencies /usr/src/app/prod_node_modules ./node_modules
-COPY --from=build /usr/src/app/dist ./dist
-RUN npm start
+COPY --from=dependencies /usr/src/app/prod_node_modules /usr/src/app/node_modules
+COPY --from=build /usr/src/app/dist /usr/src/app/dist
+ENTRYPOINT ["npm", "start"]

@@ -1,0 +1,12 @@
+version: "3.9"  # optional since v1.27.0
+services:
+  api:
+    image: heor-markov-api:latest
+    ports:
+      - "3000:3000"
+    links:
+      - mongodb
+    env_file: 
+      - .env.container
+  mongodb:
+    image: mongo:latest
