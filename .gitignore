@@ -69,3 +69,4 @@ node_modules/
 dist/
 coverage/
 corpus*
+junit.xml
