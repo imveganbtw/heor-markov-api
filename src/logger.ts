@@ -6,7 +6,7 @@ import config, { Environment } from "./config";
 const format: Format =
   config.environment === Environment.Development
     ? winston.format.combine(winston.format.cli(), winston.format.colorize())
-    : winston.format.logstash();
+    : winston.format.cli();
 
 winston.add(new winston.transports.Console({ format }));
 export default winston;

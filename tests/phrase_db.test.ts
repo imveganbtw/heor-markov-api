@@ -1,3 +1,4 @@
+/* eslint-disable no-new */
 import Logger from "winston";
 import PhraseDB from "../src/phrase_db";
 
@@ -15,9 +16,7 @@ describe("PhraseDB", () => {
   it("should connect and return a client", async () => {
     const url = "mongodb://localhost:27017";
     const client = new MongoClient(url, {});
-    const db = new PhraseDB("test", "test", client);
-    const connectedClient = await db.connect();
+    new PhraseDB("test", "test", client);
     expect(constructorSpy).toHaveBeenCalledWith(url, {});
-    expect(connectedClient).toBe(client);
   });
 });

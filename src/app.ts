@@ -18,7 +18,7 @@ app.use(
             winston.format.cli(),
             winston.format.colorize()
           )
-        : winston.format.logstash(),
+        : winston.format.cli(),
     meta: Config.loggingLevel === LoggingLevel.Debug, // include metadata in debug mode
     expressFormat: true,
     colorize: Config.environment === Environment.Development, // Colorize in dev mode
