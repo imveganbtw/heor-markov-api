@@ -1,0 +1,31 @@
+# This is a basic workflow to help you get started with Actions
+
+name: deploy-heroku
+
+# Controls when the workflow will run
+on: 
+  workflow_run:
+    workflows: ["ci"]
+    branches: [main]
+    types: 
+      - completed
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: CI
+    if: github.event.workflow_run.conclusion == 'success'
+    steps:
+    - name: Heroku Docker Container Deploy
+      uses: lucassarcanjo/heroku-deploy@2.1.17
+      with:
+        email: ${{secrets.HEROKU_EMAIL}}
+        formation: web
+        api_key: ${{secrets.HEROKU_API_KEY}}
+        app_name: ${{secrets.HEROKU_APP_NAME}}
+        dockerfile_path: ./
