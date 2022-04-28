@@ -1,6 +1,4 @@
 import { FindCursor, MongoClient } from "mongodb";
-import Logger from "./logger";
-import Config from "./config";
 
 export interface Phrase {
   author_id: string;
@@ -17,18 +15,6 @@ export default class PhraseDB {
     this.db = db;
     this.collection = collection;
     this.client = client;
-  }
-
-  public async connect(): Promise<MongoClient> {
-    Logger.info(`Connecting to PhraseDB at ${Config.db.connectionString}`);
-    try {
-      await this.client.connect();
-      Logger.info("Connection to PhraseDB established.");
-      return this.client;
-    } catch (error) {
-      Logger.error("Connection to PhraseDB failed", error);
-      throw error;
-    }
   }
 
   public async createPhrase(phrase: Phrase): Promise<string> {
@@ -57,10 +43,3 @@ export default class PhraseDB {
       .estimatedDocumentCount();
   }
 }
-
-// const phraseDB = new PhraseDB(
-// config.markov.db_name,
-// config.markov.collection_name
-// );
-// phraseDB.connect();
-// export default phraseDB;

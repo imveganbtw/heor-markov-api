@@ -1,6 +1,5 @@
 import assert, { AssertionError } from "assert";
 import { Request, Response } from "express";
-import { ParamsDictionary } from "express-serve-static-core";
 import logger from "../logger";
 import { GenerationConfig } from "../markov";
 import { Phrase } from "../phrase_db";
@@ -9,8 +8,8 @@ import { phraseDb, markov } from "../services";
 export default class PhraseController {
   public static async get(req: Request, res: Response): Promise<Response> {
     const options: GenerationConfig = {
-      from: req.params.from || "",
-      grams: parseInt(req.params.grams, 10) || 4,
+      from: req.query.from ? req.query.from.toString() : "",
+      grams: req.query.grams ? parseInt(req.query.grams.toString(), 10) : 4,
       backward: false,
     };
     const phrase = markov.generate(options);
@@ -42,7 +41,7 @@ export default class PhraseController {
     }
   }
 
-  private static parsePhrase(body: ParamsDictionary): Phrase {
+  private static parsePhrase(body: Record<string, string>): Phrase {
     assert(body.author_id !== undefined, "author_id undefined");
     assert(body.phrase !== undefined, "phrase undefined");
     return {

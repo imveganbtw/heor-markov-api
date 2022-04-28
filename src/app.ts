@@ -3,8 +3,8 @@ import winston from "winston";
 import expressWinston from "express-winston";
 import Router from "./router";
 import Config, { Environment, LoggingLevel } from "./config";
-import logger from "./logger";
-import { markov } from "./services";
+import Logger from "./logger";
+import { markov, mongoClient } from "./services";
 
 const app: Application = express();
 
@@ -27,7 +27,14 @@ app.use(
 
 app.use(Router);
 
-app.listen(Config.http.port, () => {
-  logger.info(`HTTP Server listening on port ${Config.http.port}`);
-  markov.loadCorpus();
+app.listen(Config.http.port, async () => {
+  Logger.info(`HTTP Server listening on port ${Config.http.port}`);
+  Logger.info(`Connecting to PhraseDB at ${Config.db.connectionString}`);
+  try {
+    await mongoClient.connect();
+    Logger.info("Connection to PhraseDB established.");
+    await markov.loadCorpus();
+  } catch (error) {
+    Logger.error("Startup failed with error", error);
+  }
 });

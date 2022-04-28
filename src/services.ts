@@ -11,7 +11,6 @@ export const phraseDb = new PhraseDB(
   Config.markov.collection_name,
   mongoClient
 );
-phraseDb.connect();
 
 // Markov Client
 export const markov = new Markov(phraseDb);
