@@ -18,6 +18,7 @@ interface DBConfigInterface {
 interface MarkovConfigInterface {
   db_name: string;
   collection_name: string;
+  corpus_size: number;
 }
 
 export interface ConfigInterface {
@@ -43,6 +44,7 @@ class Config implements ConfigInterface {
     this.markov = {
       db_name: process.env.MARKOV_DB_NAME as string,
       collection_name: process.env.MARKOV_COLLECTION_NAME as string,
+      corpus_size: parseInt(process.env.MARKOV_CORPUS_SIZE as string, 10),
     };
   }
 
@@ -54,7 +56,7 @@ class Config implements ConfigInterface {
 
   private static getHttpConfig(): HttpConfigInterface {
     return {
-      port: parseInt(process.env.HTTP_PORT as string, 10) || 3000,
+      port: parseInt(process.env.PORT as string, 10) || 3000,
     };
   }
 

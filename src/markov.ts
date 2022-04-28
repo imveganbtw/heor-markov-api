@@ -2,6 +2,7 @@ import MarkovChain from "purpl-markov-chain";
 import { performance } from "perf_hooks";
 import PhraseDB, { Phrase } from "./phrase_db";
 import logger from "./logger";
+import Config from "./config";
 
 export interface GenerationConfig {
   from: string;
@@ -21,7 +22,7 @@ export default class Markov {
     return this.db.getDocumentCount();
   }
 
-  public async loadCorpus(limit = 1000000): Promise<void> {
+  public async loadCorpus(limit = Config.markov.corpus_size): Promise<void> {
     const corpusSize = Math.min(limit, await this.db.getDocumentCount());
     const batchSize = (Math.round(corpusSize / 1000) * 1000) / 10;
     const cursor = this.db.getCursor({}, corpusSize);
